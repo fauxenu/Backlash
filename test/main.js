@@ -3,10 +3,13 @@ require.config({
 		'backbone': {
 			deps: ['underscore', 'jquery'],
 			exports: 'Backbone'
+		},
+		'underscore': {
+			exports: '_'
 		}
 	},
 	paths: {
-		jquery: 'lib/jquery-1.8.3',
+		jquery: 'lib/jquery',
 		backbone: 'lib/Backbone',
 		underscore: 'lib/underscore',
 		backlash: '../backlash'
@@ -28,7 +31,8 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			firstName: 'Jon',
 			lastName: 'Doe',
 			gender: 'M',
-			status: 'Single'
+			status: 'Single',
+			employed: 'Yes'
 		},
 
 		asString: function(){
@@ -46,16 +50,37 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 		tagName: 'div',
 		className: 'person',
 		template: _.template($('#person-template').text()),
+		events: {
+			'click #edit-buttons button': 'showDetails',
+			'click #view-buttons button': 'showForm'
+		},
 
 		initialize: function(){
 			this.form = new PersonFormView({model: this.model});
+			this.info = new PersonDetailsView({model: this.model});
 		},
 
 		render: function(){
 			this.$el.html(this.template({}));
+
+			this.$el.find('.content').append(this.info.render().el);
 			this.$el.find('.content').append(this.form.render().el);
 
 			return this;
+		},
+
+		showForm: function(){
+			this.$el.find('section').hide();
+			this.$el.find('#view-buttons').hide();
+			this.$el.find('form').show();
+			this.$el.find('#edit-buttons').show();
+		},
+
+		showDetails: function(){
+			this.$el.find('form').hide();
+			this.$el.find('#edit-buttons').hide();
+			this.$el.find('section').show();
+			this.$el.find('#view-buttons').show();
 		}
 	});
 
@@ -70,17 +95,30 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 		}
 	});
 
-	//var PersonDataView = Backlash.extend({});
+	var PersonDetailsView = Backlash.extend({
+		tagName: 'section',
+		template: _.template($('#person-view').text()),
+
+		render: function(){
+			this.$el.html(this.template({}));
+			return this;
+		}
+	});
 
 	//The main 'application' view
 	var MainView = Backbone.View.extend({
 		el: $('#vcards'),
 
 		initialize: function(){
+			var self = this;
+			
 			this.collection = new People();
 			this.bootstrap();
 			
-			console.log(this.collection);
+			this.listenTo(this.collection, 'add', this.addPerson);
+			$('header button').on('click', function(){
+				self.collection.add({});
+			});
 		},
 
 		/**
@@ -97,6 +135,13 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			}
 
 			this.$el.empty().append(views);
+		},
+
+		addPerson: function(model){
+			var view = new PersonView({model: model});
+
+			this.$el.append(view.render().el);
+			view.showForm();
 		}
 	});
 

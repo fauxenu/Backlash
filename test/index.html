@@ -54,8 +54,8 @@
 		.person form .field label{
 			display: block;
 		}
-		.person section {
-			display: none;
+		.person form {
+			display: none
 		}
 		.person footer{
 			border-top: 1px solid #bbb;
@@ -63,14 +63,32 @@
 			text-align: right;
 			background-color: #ddd;
 		}
+		dl {
+			margin: 0px;
+		}
+		dt {
+			font-weight: bold;
+			margin-top: 8px;
+		}
+		dl dt:first-child{
+			margin-top: 0px
+		}
+		dd {
+			margin: 0px;
+		}
+		#edit-buttons{
+			display: none
+		}
 	</style>
 	<script type="text/template" id="person-template">
-		<header><h2 data-bind="text: asString()"></h2></header>
+		<header><h2 data-bind="text: firstName"></h2></header>
 		<div class="content"></div>
 		<footer>
 			<div id="edit-buttons">
-				<button type="button">Cancel</button>
-				<button type="button">Update</button>
+				<button type="button">Done</button>
+			</div>
+			<div id="view-buttons">
+				<button type="button">Edit</button>
 			</div>
 		</footer>
 	</script>
@@ -89,8 +107,20 @@
 		</div>
 		<div class="field">
 			<label>Status</label>
-			<textarea rows="4" data-bind="value: status"></textarea>
+			<textarea rows="3" data-bind="value: status"></textarea>
 		</div>
+	</script>
+	<script type="text/template" id="person-view">
+		<dl>
+			<dt>First Name</dt>
+			<dd data-bind="text: firstName"></dd>
+			<dt>Last Name</dt>
+			<dd data-bind="text: lastName"></dd>
+			<dt>Age</dt>
+			<dd data-bind="text: age"></dd>
+			<dt>Status</dt>
+			<dd data-bind="text: status"></dd>
+		<dl>
 	</script>
 </head>
 <body>
