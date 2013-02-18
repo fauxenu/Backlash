@@ -81,7 +81,7 @@
 		}
 	</style>
 	<script type="text/template" id="person-template">
-		<header><h2 data-bind="text: firstName"></h2></header>
+		<header><h2 data-bind="text: fullName"></h2></header>
 		<div class="content"></div>
 		<footer>
 			<div id="edit-buttons">
@@ -106,6 +106,10 @@
 			<input type="number" data-bind="value: age">
 		</div>
 		<div class="field">
+			<label>Employed</label>
+			<input type="checkbox" value="Yes" data-bind="checked: employed">
+		</div>
+		<div class="field">
 			<label>Status</label>
 			<textarea rows="3" data-bind="value: status"></textarea>
 		</div>
@@ -118,6 +122,8 @@
 			<dd data-bind="text: lastName"></dd>
 			<dt>Age</dt>
 			<dd data-bind="text: age"></dd>
+			<dt>Employed</dt>
+			<dd data-bind="text: employed"></dd>
 			<dt>Status</dt>
 			<dd data-bind="text: status"></dd>
 		<dl>

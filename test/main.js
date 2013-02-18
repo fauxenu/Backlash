@@ -19,9 +19,9 @@ require.config({
 require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 	//Some dummy data to work with
 	var _data = [
-		{age: 29, firstName: 'Bryan', lastName: 'Hilmer', gender: 'M', status: 'Single'},
-		{age: 35, firstName: 'Vincet', lastName: 'Vega', gender: 'F', status: 'Dead'},
-		{age: 38, firstName: 'Dom', lastName: 'Cobb', gender: 'M', status: 'Dreaming'}
+		{age: 29, firstName: 'Bryan', lastName: 'Hilmer', gender: 'M', status: 'Single', employed: 'Yes'},
+		{age: 35, firstName: 'Vincet', lastName: 'Vega', gender: 'F', status: 'Dead', employed: 'No'},
+		{age: 38, firstName: 'Dom', lastName: 'Cobb', gender: 'M', status: 'Dreaming', employed: 'No'}
 	];
 
 	//Person model
@@ -32,7 +32,17 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			lastName: 'Doe',
 			gender: 'M',
 			status: 'Single',
-			employed: 'Yes'
+			employed: 'Yes',
+			fullName: 'Jon Doe'
+		},
+
+		initialize: function(options){
+			this.on('change:firstName change:lastName', this.setFullName);
+			this.setFullName();
+		},
+
+		setFullName: function(){
+			this.set('fullName', this.get('firstName')+' '+this.get('lastName'));
 		},
 
 		asString: function(){
@@ -133,7 +143,7 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 				var view = new PersonView({model: this.collection.at(x)});
 				views.push(view.render().el);
 			}
-
+			console.log(this.collection)
 			this.$el.empty().append(views);
 		},
 
