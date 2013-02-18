@@ -53,7 +53,7 @@
 		 						break;
 
 		 					case 'checked':
-		 						$(this).prop('checked', self.model.get(attr) == this.value);
+		 						$(this).prop('checked', self.model.get(attr).toString() == this.value);
 		 						$(this).off('click.BackLash').on('click.BackLash', function(){
 		 							self.model.set(attr, this.value);
 		 						});
