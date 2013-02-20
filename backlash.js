@@ -19,9 +19,9 @@
 	var Backlash = (function(Backbone, _, $){		
 
 		/**
-		 * Adds 'binding' functions to bas Backbone.View. This makes
+		 * Adds 'binding' functions to base Backbone.View. This makes
 		 * them available to other Backbone frameworks that extend
-		 * thhe base view object.
+		 * the base view object.
 		 */
 		_.extend(Backbone.View.prototype, {
 		 	// Default bindings array; if overriden we limit the data-bindings to the
