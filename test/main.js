@@ -19,7 +19,7 @@ require.config({
 require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 	//Some dummy data to work with
 	var _data = [
-		{age: 29, firstName: 'Bryan', lastName: 'Hilmer', gender: 'M', status: 'Single', employed: 'Yes'},
+		{age: 29, firstName: 'Bryan', lastName: 'Hilmer', gender: 'M', status: 'Single', employed: 'Yes', label: 'Yahoo', url: 'http://www.yahoo.com'},
 		{age: 35, firstName: 'Vincet', lastName: 'Vega', gender: 'F', status: 'Dead', employed: 'No'},
 		{age: 38, firstName: 'Dom', lastName: 'Cobb', gender: 'M', status: 'Dreaming', employed: 'No'}
 	];
@@ -33,7 +33,9 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			gender: 'M',
 			status: 'Single',
 			employed: 'Yes',
-			fullName: 'Jon Doe'
+			fullName: 'Jon Doe',
+			label: 'Google',
+			url: 'http://www.google.com'
 		},
 
 		initialize: function(options){
