@@ -145,7 +145,6 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 				var view = new PersonView({model: this.collection.at(x)});
 				views.push(view.render().el);
 			}
-			console.log(this.collection)
 			this.$el.empty().append(views);
 		},
 

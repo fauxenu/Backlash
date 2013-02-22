@@ -89,8 +89,6 @@
 	 						this.assignListener(binding, view);
 	 						break;
 	 					case 'href':
-	 						console.log(binding);
-	 						console.log(view.model)
 	 						$(binding.el).attr('href', model.get(binding.attr));
 	 						this.assignListener(binding, view);
 	 						break;
