@@ -45,6 +45,26 @@
 			},
 
 			/**
+			 * Removes all backlash event bindings
+			 * @private
+			 * 
+			 * @param {Backbone.View} view
+			 */
+			removeBindings: function(view) {
+				if(view._backlashBinds) {
+					var bindings = view._backlashBinds;
+					for(var x = 0; x < bindings.length; x++) {
+						if(bindings[x].type == 'value')
+							$(bindings[x].el).off('change.Backlash');
+						else if(bindings[x].type == 'checked')
+							$(bindings[x].el).off('click.Backlash');
+						else
+							view.stopListening(view.model, 'change:'+ bindings[x].attr);
+					}
+				}
+			},
+
+			/**
 			 * Parses binding values for a DOM element
 			 * @private
 			 *
@@ -83,23 +103,32 @@
 
 				if(model.has(binding.attr) && (!view.bindings.length 
 	 					|| _.contains(view.bindings, binding.attr))) {
+
+					var value = model.get(binding.attr);
 	 				switch(binding.type) {
 	 					case 'text':
-	 						$(binding.el).text(model.get(binding.attr));
+	 						$(binding.el).text(value);
 	 						this.assignListener(binding, view);
 	 						break;
 	 					case 'href':
-	 						$(binding.el).attr('href', model.get(binding.attr));
+	 						$(binding.el).attr('href', value);
 	 						this.assignListener(binding, view);
 	 						break;
 	 					case 'value':
-	 						$(binding.el).val(model.get(binding.attr));
+	 						$(binding.el).val(value);
 	 						this.assignHandler(binding, model, 'change');
 	 						break;
 	 					case 'checked':
-	 						var checked = model.get(binding.attr).toString() == binding.el.value;
-	 						$(binding.el).prop('checked', checked);
+	 						$(binding.el).prop('checked', value.toString() == binding.el.value);
 	 						this.assignHandler(binding, model, 'click');
+	 						break;
+	 					case 'disabled':
+	 						$(binding.el).prop('disabled', (value) ? true : false);
+	 						this.assignListener(binding, view);
+	 						break;
+	 					case 'visible':
+	 						(value) ? $(binding.el).show() : $(binding.el).hide();
+	 						this.assignListener(binding, view);
 	 						break;
 	 				}
 	 			}
@@ -151,10 +180,17 @@
 		 	 * Applies data binding to all elements in this view that have a
 		 	 * 'bind' data attribute.
 		 	 *
-		 	 * Mostly just a facade for BindingManger.applyBindings
+		 	 * Mostly just a facade for BindingManager.applyBindings
 		 	 */
 		 	applyBindings: function() {
 		 		this._backlashBinds = BindingManager.applyBindings(this);
+		 	},
+
+		 	/**
+		 	 * Removes all Backlash event listeners
+		 	 */
+		 	removeBindings: function() {
+		 		BindingManager.removeBindings(this);
 		 	},
 
 		 	/**
@@ -165,8 +201,20 @@
 		 	 * @param {String} bindType the aspect of the passed el we are changing
 		 	 */
 			renderFragment: function(el, value, bindType) {
-				if(bindType == 'text')
-					$(el).text(value);
+				switch(bindType){
+					case 'text':
+						$(el).text(value);
+						break;
+					case 'disabled':
+						$(binding.el).prop('disabled', (value) ? true : false);
+						break;
+					case 'visible':
+						(value) ? $(binding.el).show() : $(binding.el).hide();
+						break;
+					default:
+						$(el).attr(bindType, value);
+						break;
+				};					
 			}
 		});
 
