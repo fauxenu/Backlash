@@ -84,6 +84,7 @@
 		<header><h2 data-bind="text: fullName"></h2></header>
 		<div class="content"></div>
 		<footer>
+			<button style="float: left" class="remove">Remove Bindings</button>
 			<div id="edit-buttons">
 				<button type="button">Done</button>
 			</div>
@@ -103,7 +104,7 @@
 		</div>
 		<div class="field">
 			<label>Age</label>
-			<input type="number" data-bind="value: age">
+			<input type="number" data-bind="value: age, disabled: toggle">
 		</div>
 		<div class="field">
 			<label>Employed</label>
@@ -128,7 +129,8 @@
 			<dd data-bind="text: status"></dd>
 			<dt>Test</dt>
 			<dd><a href="#" data-bind="text: label, href: url"></a></dd>
-		<dl>
+		</dl>
+		<p data-bind="visible: toggle">Can you see me?</p>
 	</script>
 </head>
 <body>

@@ -20,8 +20,8 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 	//Some dummy data to work with
 	var _data = [
 		{age: 29, firstName: 'Bryan', lastName: 'Hilmer', gender: 'M', status: 'Single', employed: 'Yes', label: 'Yahoo', url: 'http://www.yahoo.com'},
-		{age: 35, firstName: 'Vincet', lastName: 'Vega', gender: 'F', status: 'Dead', employed: 'No'},
-		{age: 38, firstName: 'Dom', lastName: 'Cobb', gender: 'M', status: 'Dreaming', employed: 'No'}
+		{age: 35, firstName: 'Vincet', lastName: 'Vega', gender: 'F', status: 'Dead', employed: 'No', toggle: false},
+		{age: 38, firstName: 'Dom', lastName: 'Cobb', gender: 'M', status: 'Dreaming', employed: 'No', toggle: false}
 	];
 
 	//Person model
@@ -35,7 +35,8 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			employed: 'Yes',
 			fullName: 'Jon Doe',
 			label: 'Google',
-			url: 'http://www.google.com'
+			url: 'http://www.google.com',
+			toggle: true
 		},
 
 		initialize: function(options){
@@ -64,7 +65,8 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 		template: _.template($('#person-template').text()),
 		events: {
 			'click #edit-buttons button': 'showDetails',
-			'click #view-buttons button': 'showForm'
+			'click #view-buttons button': 'showForm',
+			'click .remove': 'clearBindings'
 		},
 
 		initialize: function(){
@@ -93,6 +95,12 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			this.$el.find('#edit-buttons').hide();
 			this.$el.find('section').show();
 			this.$el.find('#view-buttons').show();
+		},
+
+		clearBindings: function(){
+			this.removeBindings();
+			this.form.removeBindings();
+			this.info.removeBindings();
 		}
 	});
 
