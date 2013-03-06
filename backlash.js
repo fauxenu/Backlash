@@ -2,7 +2,7 @@
  * A simple library that attempts to bring Knockout style model-view
  * bindings to Backbone
  * 
- * @version 0.2.0
+ * @version 0.2.1
  */
 (function (root, factory) {
 	if(typeof exports === 'object') {
@@ -38,7 +38,7 @@
 
 				// Parses and assigns data bindings
 				view.$('*[data-bind]').each(function(){
-					bindings = bindings.concat(self.parseBinding(this, view));
+					self.parseBinding(this, view, bindings);
 				});
 
 				return bindings;
@@ -70,11 +70,10 @@
 			 *
 			 * @param {Object} el DOM element
 			 * @param {Backbone.View} view
-			 * @returns {Object} binding object
+			 * @param {Array} bindings array to add parsed binding to
 			 */
-			parseBinding: function(el, view) {
-				var binds = $(el).attr('data-bind').split(','),
-					parsed = [];
+			parseBinding: function(el, view, bindings) {
+				var binds = $(el).attr('data-bind').split(',');
 
 				for(var x = 0; x < binds.length; x++) {
 					var array = binds[x].split(':'),
@@ -84,11 +83,11 @@
 							el: el	
 						};
 
-					this.activateBinding(binding, view);
-					parsed.push(binding);
+					if(!view.bindings.length || _.contains(view.bindings, binding.attr)){
+						this.activateBinding(binding, view);
+						bindings.push(binding);
+					}
 				}
-
-				return parsed;
 			},
 
 			/**
@@ -101,9 +100,7 @@
 			activateBinding: function(binding, view) {
 				var model = view.model;
 
-				if(model.has(binding.attr) && (!view.bindings.length 
-	 					|| _.contains(view.bindings, binding.attr))) {
-
+				if(model.has(binding.attr)) {
 					var value = model.get(binding.attr);
 	 				switch(binding.type) {
 	 					case 'text':

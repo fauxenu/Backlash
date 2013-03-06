@@ -62,6 +62,7 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 	var PersonView = Backlash.extend({
 		tagName: 'div',
 		className: 'person',
+		bindings: ['fullName'],
 		template: _.template($('#person-template').text()),
 		events: {
 			'click #edit-buttons button': 'showDetails',
