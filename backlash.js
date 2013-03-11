@@ -2,7 +2,7 @@
  * A simple library that attempts to bring Knockout style model-view
  * bindings to Backbone
  * 
- * @version 0.2.1
+ * @version 0.3.0
  */
 (function (root, factory) {
 	if(typeof exports === 'object') {
@@ -116,7 +116,7 @@
 	 						this.assignHandler(binding, model, 'change');
 	 						break;
 	 					case 'checked':
-	 						$(binding.el).prop('checked', value.toString() == binding.el.value);
+	 						this.toggleCheckedProperty(value, binding.el);
 	 						this.assignHandler(binding, model, 'click');
 	 						break;
 	 					case 'disabled':
@@ -157,9 +157,57 @@
 			 * @param {String} event the event type (click, change, etc)
 			 */
 			assignHandler: function(binding, model, event) {
+				var self = this;
+
 				$(binding.el).off(event+'.BackLash').on(event+'.BackLash', function(){
-					model.set(binding.attr, this.value);
+					var type = $(this).attr('type');
+
+					if(type == 'checkbox' || type == 'radio')
+						self.setCheckedValue(model, binding.attr, this);
+					else
+						model.set(binding.attr, this.value);
 		 		});
+			},
+
+			/**
+			 * Handles 'checked' property assignment for radio and checkbox inputs
+			 *
+			 * @param {Object} attr model attribute value
+			 * @param {Object} el checkbox/radio element
+			 */
+			toggleCheckedProperty: function(attr, el) {
+				if(_.isArray(attr))
+	 				$(el).prop('checked', attr.indexOf(el.value) > -1);
+	 			else
+	 				$(el).prop('checked', attr.toString() == el.value);
+			},
+
+			/**
+			 * Upates model when radio/checkboxes are changed
+			 *
+			 * @param {Backbone.Model} the model we want to update
+			 * @param {String} attr model attribute value
+			 * @param {Object} el radio/checkbox input element 
+			 */
+			setCheckedValue: function(model, attr, el) {
+				var checked = $(el).prop('checked');
+				
+				if(_.isArray(model.get(attr))) {
+					var array = model.get(attr),
+						index = array.indexOf(el.value);
+
+					if(!checked && index > -1) {
+						array.splice(index, 1);
+						model.trigger('change:' + attr, model, array, {});
+					}
+					else if(checked && index == -1) {
+						array.push(el.value);
+						model.trigger('change:' + attr, model, array, {});
+					}
+						
+				}
+				else
+					model.set(attr, checked);
 			}
 		};
 
