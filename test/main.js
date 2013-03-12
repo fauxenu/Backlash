@@ -36,11 +36,13 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 			fullName: 'Jon Doe',
 			label: 'Google',
 			url: 'http://www.google.com',
-			pets: [],
 			toggle: true
 		},
 
 		initialize: function(options){
+			if(!this.get('pets'))
+				this.set({pets: new Array()}, {silent: true});
+
 			this.on('change:firstName change:lastName', this.setFullName);
 			this.setFullName();
 		},
@@ -121,9 +123,23 @@ require(['jquery', 'backbone', 'backlash'], function($, Backbone, Backlash){
 		tagName: 'section',
 		template: _.template($('#person-view').text()),
 
+		initialize: function(){
+			this.listenTo(this.model, 'change:pets', this.listPets);
+		},
+
 		render: function(){
 			this.$el.html(this.template({}));
+			this.listPets();
 			return this;
+		},
+
+		listPets: function(){
+			var pets = this.model.get('pets');
+
+			if(pets.length)
+				this.$('.pets').text(pets.toString().replace(/,/g, ', '));
+			else
+				this.$('.pets').text('none');
 		}
 	});
 
