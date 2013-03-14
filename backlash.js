@@ -178,6 +178,8 @@
 			toggleCheckedProperty: function(attr, el) {
 				if(_.isArray(attr))
 	 				$(el).prop('checked', attr.indexOf(el.value) > -1);
+				else if(_.isBoolean(attr))
+					$(el).prop('checked', attr);
 	 			else
 	 				$(el).prop('checked', attr.toString() == el.value);
 			},
@@ -205,6 +207,9 @@
 						model.trigger('change:' + attr, model, array, {});
 					}
 						
+				}
+				else if(_.isBoolean(model.get(attr))) {
+					model.set(attr, $(el).is(':checked'));
 				}
 				else
 					model.set(attr, checked);
