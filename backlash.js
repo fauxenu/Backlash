@@ -256,10 +256,10 @@
 						$(el).text(value);
 						break;
 					case 'disabled':
-						$(binding.el).prop('disabled', (value) ? true : false);
+						$(el).prop('disabled', (value) ? true : false);
 						break;
 					case 'visible':
-						(value) ? $(binding.el).show() : $(binding.el).hide();
+						(value) ? $(el).show() : $(el).hide();
 						break;
 					default:
 						$(el).attr(bindType, value);
