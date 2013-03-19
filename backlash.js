@@ -127,6 +127,10 @@
 	 						(value) ? $(binding.el).show() : $(binding.el).hide();
 	 						this.assignListener(binding, view);
 	 						break;
+	 					case 'src':
+	 						$(binding.el).attr('src', value);
+	 						this.assignListener(binding, view);
+	 						break;
 	 				}
 	 			}
 			},
