@@ -2,7 +2,7 @@
  * A simple library that attempts to bring Knockout style model-view
  * bindings to Backbone
  * 
- * @version 0.3.0
+ * @version 0.4.0
  */
 (function (root, factory) {
 	if(typeof exports === 'object') {
@@ -123,8 +123,16 @@
 	 						$(binding.el).prop('disabled', (value) ? true : false);
 	 						this.assignListener(binding, view);
 	 						break;
+	 					case 'enabled':
+	 						$(binding.el).prop('disabled', (value) ? false : true);
+	 						this.assignListener(binding, view);
+	 						break;
 	 					case 'visible':
 	 						(value) ? $(binding.el).show() : $(binding.el).hide();
+	 						this.assignListener(binding, view);
+	 						break;
+	 					case 'hidden':
+	 						(value) ? $(binding.el).hide() : $(binding.el).show();
 	 						this.assignListener(binding, view);
 	 						break;
 	 					case 'src':
@@ -262,8 +270,14 @@
 					case 'disabled':
 						$(el).prop('disabled', (value) ? true : false);
 						break;
+					case 'enabled':
+						$(el).prop('disabled', (value) ? false : true);
+						break;
 					case 'visible':
 						(value) ? $(el).show() : $(el).hide();
+						break;
+					case 'hidden':
+						(value) ? $(el).hide() : $(el).show();
 						break;
 					default:
 						$(el).attr(bindType, value);
