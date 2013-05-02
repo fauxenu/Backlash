@@ -100,7 +100,7 @@
 			activateBinding: function(binding, view) {
 				var model = view.model;
 
-				if(model.attributes[binding.attr]) {
+				if(model.has(binding.attr)) {
 					var value = model.get(binding.attr);
 	 				switch(binding.type) {
 	 					case 'text':
